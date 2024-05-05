@@ -119,9 +119,8 @@ def updateStatus(message):
     print(response.text)
 
 
-# schedule.every().hour.at(":20").do(calculate_time_left)
-# while True:
-#     schedule.run_pending()
-#     sleep(1)
-
 calculate_time_left()
+schedule.every().hour.at(":20").do(calculate_time_left)
+while True:
+    schedule.run_pending()
+    sleep(1)
