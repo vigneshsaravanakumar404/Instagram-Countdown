@@ -119,6 +119,7 @@ def updateStatus(message):
     print(response.text)
 
 
+print("Starting...")
 calculate_time_left()
 schedule.every().hour.at(":20").do(calculate_time_left)
 while True:
