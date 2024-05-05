@@ -1,30 +1,32 @@
 from requests import post
 from pytz import timezone
+from datetime import datetime, timezone, timedelta
 from time import sleep
 import schedule
-import datetime
 
 
 def calculate_time_left():
     # Get the current time in EDT
-    eastern = timezone("America/New_York")
-    current_time = datetime.datetime.now(eastern)
+    eastern = timezone(timedelta(hours=-4))  # EDT is UTC-4
+    current_time = datetime.now(eastern)
 
     # Make sure last_day is in EDT
-    last_day = datetime.datetime(2024, 5, 31, 2 + 11, 20, 0, tzinfo=eastern)
+    last_day = datetime(2024, 5, 31, 14, 20, 0, tzinfo=eastern)  # May 31st, 2:20 PM EDT
 
     # Calculate the time left until the last day
     time_left = last_day - current_time
 
     days_left = time_left.days
-    hours_left = time_left.seconds // 3600
-    minutes_left = (time_left.seconds % 3600) // 60
+    total_seconds_left = time_left.total_seconds()
+    hours_left = round((total_seconds_left % 86400) // 3600)
+    minutes_left = round((total_seconds_left % 3600) / 60)
 
     # Format the time left
     time_left_formatted = f"{days_left}d {hours_left}h {minutes_left}m"
     message = f"School ends in {time_left_formatted}"
 
     updateStatus(message)
+    print(f"Updated status: {message} at time {current_time}")
 
 
 # Functions
@@ -121,7 +123,10 @@ def updateStatus(message):
 
 print("Starting...")
 calculate_time_left()
+schedule.every().hour.at(":05").do(calculate_time_left)
 schedule.every().hour.at(":20").do(calculate_time_left)
+schedule.every().hour.at(":35").do(calculate_time_left)
+schedule.every().hour.at(":50").do(calculate_time_left)
 while True:
     schedule.run_pending()
     sleep(1)
