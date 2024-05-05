@@ -18,12 +18,11 @@ def calculate_time_left():
 
     days_left = time_left.days
     hours_left = time_left.seconds // 3600
+    minutes_left = (time_left.seconds % 3600) // 60
 
-    # Determine text for pluralization
-    days_text = "day" if days_left == 1 else "days"
-    hours_text = "hour" if hours_left == 1 else "hours"
-
-    message = f"School ends in {days_left} {days_text} {hours_left} {hours_text}"
+    # Format the time left
+    time_left_formatted = f"{days_left}d {hours_left}h {minutes_left}m"
+    message = f"School ends in {time_left_formatted}"
 
     updateStatus(message)
 
@@ -120,7 +119,9 @@ def updateStatus(message):
     print(response.text)
 
 
-schedule.every().hour.at(":00").do(calculate_time_left)
-while True:
-    schedule.run_pending()
-    sleep(1)
+# schedule.every().hour.at(":20").do(calculate_time_left)
+# while True:
+#     schedule.run_pending()
+#     sleep(1)
+
+calculate_time_left()
