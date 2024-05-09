@@ -21,6 +21,14 @@ def calculate_time_left():
     hours_left = round((total_seconds_left % 86400) // 3600)
     minutes_left = round((total_seconds_left % 3600) / 60)
 
+    if minutes_left == 60:
+        hours_left += 1
+        minutes_left = 0
+
+    if hours_left == 24:
+        days_left += 1
+        hours_left = 0
+
     # Format the time left
     time_left_formatted = f"{days_left}d {hours_left}h {minutes_left}m"
     message = f"School ends in {time_left_formatted}"
